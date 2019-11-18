@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_NullLayout.cshtml";
+}
+@section CustomCss{
+
+}
+<div class="cw-intro-page row">
+    <div class="col-sm-6 cw-wapper">
+        <h1 style="font-size: 40px;line-height: 47px;text-align: left;font-weight:300"><strong>BUSINESS PROCESS MODELING</strong> MADE EASILY</h1>
+        <div class="cw-benefit">
+            <p>This&nbsp;<strong>business process modeling tool</strong>&nbsp;has everything an expert in processes could ever want</p>
+            <ul>
+                <li>Model your processes</li>
+                <li>Quick and easy to use.</li>
+                <li>Uses BPMN 2.0 notation.</li>
+                <li>
+                    Generates perfect, beautiful, complete, professional and stylish documentation.
+                </li>
+            </ul>
+            <div class="cw-btn-intro">
+                <a href="#" class="btn btn-success cw-btn-big" btn>Create Account</a>
+                <a href="@Url.Action("Index", "Group")" class="btn btn-default cw-btn-big" btn>Find Group</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 cw-wapper">
+        <img src="~/Content/images/intro.jpg" width="600" height="400" alt="Alternate Text" />
+    </div>
+</div>

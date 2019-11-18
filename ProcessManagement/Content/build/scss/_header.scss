@@ -1,0 +1,30 @@
+﻿.navbar-nav {
+    .icon-menu {
+        transition: all 0.3s ease-in-out;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        .notification-dot
+        {
+            background-color: rgb(255, 0, 0);
+        }
+    }
+    .dropdown-menu{
+        padding: 8px 10px;
+    }
+    .small-flag{
+        width: 25px;
+        height: 25px;
+    }
+}
+.navbar-fixed-top{
+    top:0;
+}
+@include respond-to-screen-size(-1, 500px){
+    .navbar-nav{
+        .icon-menu{
+            padding: 13px;
+        }
+    }
+}

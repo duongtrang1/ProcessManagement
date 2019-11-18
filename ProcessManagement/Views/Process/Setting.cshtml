@@ -1,0 +1,82 @@
+﻿@model ProcessManagement.Models.Process
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var group = ViewData["Group"] as ProcessManagement.Models.Group;
+}
+@section CustomCss{
+    <link rel="stylesheet" href="~/Content/vendor/dropify/css/dropify.min.css">
+}
+<div class="block-header">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <a href="javascript:void(0);" class="btn btn-xs btn-link primary-theme btn-toggle-fullwidth primary-theme">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+            <ul class="breadcrumb">
+                <li><a href="@Url.RouteUrl("GroupLocalizedDefault", new { controller = "group", action = "index"})"><i class="icon-home"></i></a></li>
+                <li><a href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "group", action = "show", groupid = group.Id })">Group: @group.Name</a></li>
+                <li><a href="javascript:void(0);"><i class="icon-pencil"></i> Edit Process</a></li>
+            </ul>
+        </div>
+        @*<div class="col-lg-6 col-md-4 col-sm-12 text-right">
+            <div class="bh_chart hidden-xs">
+                <div class="float-left m-r-15">
+                    <small>Visitors</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-user"></i> 1,784</h6>
+                </div>
+                <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Visits</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-globe"></i> 325</h6>
+                </div>
+                <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Chats</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> 13</h6>
+                </div>
+                <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
+            </div>
+        </div>*@
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card">
+            <div class="body">
+                <form action="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "process", action = "setting"})" method="POST" enctype="multipart/form-data">
+                    <div class="row clearfix">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <label for="process-name" class="required">Process Name</label>
+                                <input type="text" class="form-control" id="process-name" name="@Html.NameFor(m => m.Name)" value="@Model.Name">
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <label for="process-description">Description</label>
+                                <textarea class="form-control" rows="6" placeholder="Write something about your process (optional)" id="process-description" name="@Html.NameFor(m => m.Description)">@Model.Description</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <button class="btn btn-primary-theme waves-effect" type="submit">Save</button>
+                                <button class="btn btn-default waves-effect" type="button">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section CustomScripts{
+    <script src="~/Content/vendor/dropify/js/dropify.min.js"></script>
+    <script src="~/Content/build/js/pages/forms/dropify.js"></script>
+
+}
+

@@ -1,0 +1,78 @@
+﻿@model ProcessManagement.Models.Role
+@{
+    ViewBag.Title = "EditRole";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var group = ViewData["Group"] as ProcessManagement.Models.Group;
+}
+<div class="block-header">
+    <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <h2>
+                <a href="javascript:void(0);" class="btn btn-xs btn-link primary-theme btn-toggle-fullwidth">
+                    <i class="fa fa-arrow-left"></i>
+                </a> Add Role
+            </h2>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/Index" class="primary-theme"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="/" class="primary-theme">Groups</a></li>
+                <li class="breadcrumb-item"><a href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "group", action = "Show", groupid = group.Id })" class="primary-theme">@group.Name</a></li>
+                <li class="breadcrumb-item"><a href="" class="primary-theme">@Model.Name</a></li>
+                <li class="breadcrumb-item"><a href="" class="primary-theme">Add Role</a></li>
+            </ul>
+        </div>
+        @*<div class="col-lg-6 col-md-4 col-sm-12 text-right">
+            <div class="bh_chart hidden-xs">
+                <div class="float-left m-r-15">
+                    <small>Visitors</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-user"></i> 1,784</h6>
+                </div>
+                <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Visits</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-globe"></i> 325</h6>
+                </div>
+                <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Chats</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> 13</h6>
+                </div>
+                <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
+            </div>
+        </div>*@
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="body">
+                <form action="@Url.RouteUrl("GroupLocalizedDefault", new { controller = "process", action = "editrole"})" method="POST">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="role-name" class="required">Role Name</label>
+                                <input type="text" name="@Html.NameFor(m => m.Name)" class="form-control" id="role-name" value="@Model.Name">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="role-description">Description</label>
+                                <textarea name="@Html.NameFor(m => m.Description)" class="form-control" id="role-description" rows="7">@Model.Description</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <button class="btn btn-primary-theme waves-effect" type="submit">Save</button>
+                            <button class="btn btn-default waves-effect" type="button">Back</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

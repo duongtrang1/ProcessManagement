@@ -1,0 +1,65 @@
+.waves-effect{
+    position: relative;
+    overflow: hidden;
+    &:hover,&:focus{
+        box-shadow: none;
+    }
+    &:not(.btn-default):not(.btn-none){
+        .btn-ripple{
+            background: rgba(255, 255, 255, 0.3);
+            position: absolute;
+            border-radius: 100%;
+            animation: ripple 1s;
+            transform: scale(0);
+        }
+    }
+    &.btn-default,&.btn-none{
+        &:hover,&:focus{
+            color: #777;
+        }
+        .btn-ripple{
+            background: rgba(136, 135, 135, 0.342);
+            position: absolute;
+            border-radius: 100%;
+            animation: ripple 1s;
+            transform: scale(0);
+        }
+    }
+}
+.btn{
+    font-weight: 500;
+    &:not(.btn-link):not([disabled]):not(.btn-none){
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+        &:focus,&:active{
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,.4);
+    
+        }
+    }
+    
+}
+.btn-circle{
+    border-radius: 30px;
+    padding: 7px 23px;
+}
+.btn-warning{
+    &, &:hover, &:focus{
+        color: #fff;
+        text-decoration: none;
+    }
+}
+.btn-none{
+    color: #000;
+    background: none;
+    border: none;
+    padding: 8px 18px;
+    &:hover, &:focus{
+        color: #000;
+        background: none;
+    }
+}
+@keyframes ripple{
+    100%{
+        transform: scale(2);
+        opacity: 0;
+    }
+}

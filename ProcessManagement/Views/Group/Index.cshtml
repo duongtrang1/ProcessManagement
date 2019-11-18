@@ -1,0 +1,234 @@
+﻿@{
+    ViewBag.Title = "Group List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var grouplist = ViewData["ListGroup"] as List<ProcessManagement.Models.Group>;
+
+}
+@section CustomCss{
+    @*<style>
+            .avatar-default {
+                padding-top: 10%;
+                font-size: 100px;
+                text-align: center;
+                font-weight: bold;
+                color: black;
+            }
+        </style>*@
+    @*<link rel="stylesheet" href="//cdn.datatables.net/responsive/2.2.2/css/responsive.bootstrap4.min.css" />*@
+}
+<div class="block-header">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <h2>
+                <a href="javascript:void(0);" class="btn btn-xs btn-link primary-theme btn-toggle-fullwidth">
+                    <i class="fa fa-arrow-left"></i>
+                </a> Home
+            </h2>
+        </div>
+        @*<div class="col-lg-6 col-md-4 col-sm-12 text-right">
+            <div class="bh_chart hidden-xs">
+                <div class="float-left m-r-15">
+                    <small>Visitors</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-user"></i> 1,784</h6>
+                </div>
+                <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Visits</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-globe"></i> 325</h6>
+                </div>
+                <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Chats</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> 13</h6>
+                </div>
+                <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
+            </div>
+        </div>*@
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card">
+            <div class="body project_report">
+                <div class="table-responsive">
+                    <a class="btn btn-primary-theme waves-effect" href="@Url.Action("newgroup","group")">New Group</a>
+                    <table class="table table-hover js-grouplist-table dataTable dt-responsive table-custom m-b-0" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Group</th>
+                                <th>Owner</th>
+                                <th>Member</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*<tr>
+                                    <td class="project-title">
+                                        <h6>InfiniO 4.1</h6>
+                                        <small>Created 14 July, 2018</small>
+                                    </td>
+                                    <td>
+                                        <img src="~/Content/images/xs/avatar1.jpg" data-toggle="tooltip"
+                                             data-placement="top" title="Team Lead" alt="Avatar"
+                                             class="width35 rounded">
+                                    </td>
+                                    <td>
+                                        <ul class="list-unstyled team-info">
+                                            <li>
+                                                <img src="~/Content/images/xs/avatar1.jpg"
+                                                     data-toggle="tooltip" data-placement="top"
+                                                     title="Avatar" alt="Avatar">
+                                            </li>
+                                            <li>
+                                                <img src="~/Content/images/xs/avatar2.jpg"
+                                                     data-toggle="tooltip" data-placement="top"
+                                                     title="Avatar">
+                                            </li>
+                                            <li>
+                                                <img src="~/Content/images/xs/avatar3.jpg"
+                                                     data-toggle="tooltip" data-placement="top"
+                                                     title="Avatar">
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td><span class="badge badge-success">Active</span></td>
+                                    <td class="project-actions">
+                                        <a href="project-detail.html"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                        <a href="javascript:void(0);"
+                                           class="btn btn-sm btn-outline-success">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                        <a href="javascript:void(0);"
+                                           class="btn btn-sm btn-outline-danger js-sweetalert"
+                                           title="Delete" data-type="confirm">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section CustomScripts{
+    @*<script src="//cdn.datatables.net/responsive/2.2.2/js/dataTables.responsive.min.js"></script>*@
+    @*<script src="~/Content/build/js/pages/tables/jquery-datatable.js"></script>*@
+<script type="text/javascript">
+    $(function () {
+        var lang = getCurrentLang();
+        $(".js-grouplist-table").DataTable({
+            "processing": true,
+            "serverSide": false,
+            "bLengthChange": false,
+            "language": {
+                "emptyTable": "You doesn't have any group yet",
+                "info": "Showing _START_ to _END_ of _TOTAL_ group",
+            },
+            "ajax": {
+                "type": "GET",
+                "url": "@Url.Action("getgrouplist", "group", new { area = "api"})",
+                "dataSrc": function (json) {
+                    json = json.data;
+                    var lang = getCurrentLang();
+                    console.log(json);
+                    var return_data = [];
+                    for (var i = 0; i < json.length; i++) {
+                        var action = `${lang}/${json[i].slug}-${json[i].id}/group`;
+                        var name = `<a href="${action}" class="primary-theme"><h6>${json[i].name}</h6></a><small>${json[i].time_ralitive}</small>`;
+                        var sort = json[i].update_at.sort;
+                        var owner = getOwnerAvatar(json[i].owner.name, json[i].owner.avatar);
+                        var members = json[i].members.list;
+                        var memberAvatar;
+                        //member left
+                        var membertotal = json[i].members.total;
+                        var memberleft = membertotal - 4;
+
+                        var member;
+                        if (membertotal == 1) {
+                            member = "There aren't member in group yet";
+                        } else {
+                            member = `<ul class="list-unstyled team-info">`;
+                            for (var j = 0; j < members.length; j++) {
+
+                                if (j == 3) {
+                                    if (memberleft > 1) {
+                                        member += `<li>${getMemberLeft(memberleft)}</li>`;
+                                        break;
+                                    }
+                                }
+                                memberAvatar = getMemberAvatar(members[j].name, members[j].avatar);
+                                member += `<li>${memberAvatar}</li>`;
+                            }
+                            member += `</ul>`;
+                        }
+
+                        return_data.push({
+                            "name": name,
+                            "sort": sort,
+                            "owner": owner,
+                            "member": member,
+                        })
+
+                    }
+                    return return_data;
+                }
+            },
+            "createdRow": function (row, data, dataIndex) {
+                if (dataIndex == 1 ) {
+                    $(row).addClass("project-title");
+                }
+            },
+            "columns": [
+                {
+                    data: {
+                        _: "name",
+                        sort: "sort"
+                    }
+                },
+                { data: "owner" },
+                { data: "member" }
+            ],
+            //columnDefs: [
+            //    { responsivePriority: 1, targets: 0 },
+            //    { responsivePriority: 2, targets: 3 },
+            //    { responsivePriority: 3, targets: 4 }
+            //],
+            "order": [[0, "desc"]],
+            "initComplete": function () {
+                $(".btn-newgroup").html('<a href="#" class="btn btn-success">New Group</a>');
+                $(".page-item:not(.previous):not(.next) a").addClass("waves-effect");
+            },
+            "drawCallback": function (setting) {
+                //$('[data-toggle="tooltip"]').tooltip();
+            }
+        });
+    })
+    function getOwnerAvatar(name, avatar) {
+        if (avatar.avatar != "") {
+            return `<img src="Content/images/xs/avatar1.jpg" data-toggle="tooltip" data-placement="top" title="${name}" alt="Avatar" class="width35 rounded">`;
+        } else {
+            var avatardefault = JSON.parse(avatar.avatardefault);
+            return `<div data-toggle="tooltip" data-placement="top" title="${name}" class="width35 rounded owner-default" style="background-color:${avatardefault.background}">${avatardefault.name}</div>`
+        }
+    }
+    function getMemberAvatar(name, avatar) {
+        if (avatar.avatar != "") {
+            return `<img src="Content/images/xs/avatar1.jpg" data-toggle="tooltip" data-placement="top" title="${name}" alt="Avatar">`;
+        } else {
+            var avatardefault = JSON.parse(avatar.avatardefault);
+            return `<div data-toggle="tooltip" data-placement="top" title="${name}" class="member-default" style="background-color:${avatardefault.background}">${avatardefault.name}</div>`;
+        }
+    }
+    function getMemberLeft(memberleft) {
+        return `<div data-toggle="tooltip" data-placement="top" title="and ${memberleft} member more..." class="member-default member-left">${memberleft}+</div>`;
+    }
+</script>
+}

@@ -1,0 +1,11 @@
+#footer{
+    margin-top: 10px;
+    font-size: 15px;
+    a{
+        font-weight: bold;
+        color:#5a5a5a;
+        &:hover{
+            color:darken(#5a5a5a,20%);
+        }
+    }
+}

@@ -1,0 +1,143 @@
+﻿@model ProcessManagement.Models.Group
+
+@{
+    ViewBag.Title = "MyTask";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var listprocess = ViewData["ListProcessRun"] as JArray;
+    
+}
+
+
+@section CustomCss{
+    <link rel="stylesheet" href="~/Content/vendor/nestable/jquery-nestable.css" />
+}
+<div class="block-header">
+    <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> TaskBoard</h2>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/Index" class="primary-theme"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="/" class="primary-theme">Groups</a></li>
+                <li class="breadcrumb-item"><a href="" class="primary-theme">My Task</a></li>
+            </ul>
+        </div>
+        @*<div class="col-lg-6 col-md-4 col-sm-12 text-right">
+            <div class="bh_chart hidden-xs">
+                <div class="float-left m-r-15">
+                    <small>Visitors</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-user"></i> 1,784</h6>
+                </div>
+                <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Visits</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-globe"></i> 325</h6>
+                </div>
+                <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Chats</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> 13</h6>
+                </div>
+                <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
+            </div>
+        </div>*@
+    </div>
+</div>
+<div class="row clearfix" id="mytask-content">
+    @if (listprocess == null)
+    {
+        <h2>You don't have any task</h2>
+    }
+    else
+    {
+        foreach (var process in listprocess)
+        {
+            <div class="col-lg-4 col-md-12">
+                <div class="card planned_task">
+                    <div class="header" style="padding-bottom: 0;">
+                        <a href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detail", processid = process["id"] })"><h5>@process["name"]</h5></a>
+                        <h6>@process["status"]</h6>
+                    </div>
+                    <div class="body">
+                        <div class="dd" data-plugin="nestable">
+                            <ol class="dd-list">
+                                @foreach (var task in process["task"]["open"])
+                                {
+                                     var action = (string)task["valueform"] == null ? Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detailtask", idruntask = task["id"] }) : Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detailtaskform", idruntask = task["id"] });
+                                     
+                                    <a href="@action">
+                                        <li class="dd-item" data-id="">
+                                            <div class="dd-handle" style="background: antiquewhite">
+                                                <h6>@task["name"]</h6>
+                                                <p>@task["description"]</p>
+                                                <ul class="list-unstyled team-info m-t-20">
+                                                    <li>Role: <b>@task["rolename"]</b></li>
+                                                    <li style="float: right;">Status: <b>@task["status"]</b></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </a>
+                                }
+                                @foreach (var task in process["task"]["done"])
+                                {
+                                    var action = (string)task["valueform"] == "" ? Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detailtask", idruntask = task["id"] }) : Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detailtaskform", idruntask = task["id"] });
+                                    <a href="@action">
+                                        <li class="dd-item" data-id="">
+                                            <div class="dd-handle" style="background: aliceblue">
+                                                <h6>@task["name"]</h6>
+                                                <p>@task["description"]</p>
+                                                <ul class="list-unstyled team-info m-t-20">
+                                                    <li>Role: <b>@task["rolename"]</b></li>
+                                                    <li style="float: right;">Status: <b>@task["status"]</b></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </a>
+                                }
+                                @*@foreach (var task in process["task"]["finish"])
+                                {
+                                    <a href="#">
+                                        <li class="dd-item" data-id="">
+                                            <div class="dd-handle" style="background: #f7f7f7">
+                                                <h6>@task["name"]</h6>
+                                                <p>@task["description"]</p>
+                                                <ul class="list-unstyled team-info m-t-20">
+                                                    <li><p>Role: @task["rolename"]</p></li>
+                                                    <li style="float: right"><p>Status: @task["status"]</p></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </a>
+                                }*@
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+@section CustomScripts{
+
+    @*<script>
+        function getProcess(data) {
+            $.ajax({
+                url: "@Url.Action("ListTaskInProcess", "mytask",new { area = "api"})",
+                type: "GET",
+                data: {groupid : data},
+                dataType: "html",
+                success: function (response) {
+                    //partial view nó trả nguyên html thay vì json
+                    $("#mytask-content").html(response);
+                }
+            });
+        }
+        getProcess(@Model.Id);
+    </script>*@
+}
+

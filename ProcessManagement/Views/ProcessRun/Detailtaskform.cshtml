@@ -1,0 +1,695 @@
+﻿@model ProcessManagement.Models.TaskProcessRun
+@using System.Text.RegularExpressions;
+
+@{
+    PMSEntities db = new PMSEntities();
+    ViewBag.Title = "Detailtaskform";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userRole = ViewData["UserRoles"] as ProcessManagement.Models.Participate;
+    var isManager = userRole.IsManager;
+    var idUser = ViewData["UserId"];
+    var role = ViewData["Rolerun"] as ProcessManagement.Models.RoleRun;
+    //rule
+    var textLength = ViewData["TextMaxLength"] as ProcessManagement.Models.ConfigRule;
+    var maxFileSizeRule = ViewData["FileMaxSize"] as ProcessManagement.Models.ConfigRule;
+    var files = ViewData["Files"] as List<ProcessManagement.Models.FileManager>;
+
+}
+
+@section CustomCss{
+    <link rel="stylesheet" href="~/Content/vendor/dropify/css/dropify.min.css">
+    <style>
+        .comments-app {
+            margin: 50px auto;
+            max-width: 680px;
+            padding: 0 50px;
+            width: 100%;
+        }
+
+        .comments-app h1 {
+            color: #191919;
+            margin-bottom: 1.5em;
+            text-align: center;
+            text-shadow: 0 0 2px rgba(152, 152, 152, 1);
+        }
+
+        .comment-form .comment-avatar {
+        }
+
+        .comment-form .form {
+            margin-left: 100px;
+        }
+
+        .comment-form .form .form-row {
+            margin-bottom: 10px;
+        }
+
+        .comment-form .form .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .comment-form .form .input {
+            background-color: #fcfcfc;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .15);
+            color: #555f77;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 5px 10px;
+            outline: none;
+            width: 100%;
+            -webkit-transition: 350ms box-shadow;
+            -moz-transition: 350ms box-shadow;
+            -ms-transition: 350ms box-shadow;
+            -o-transition: 350ms box-shadow;
+            transition: 350ms box-shadow;
+        }
+
+        .comment-form .form textarea.input {
+            height: 100px;
+            padding: 15px;
+        }
+
+        .comment-form .form label {
+            color: #555f77;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .comment-form .form .input:focus {
+            box-shadow: 0 2px 6px rgba(121, 137, 148, .55);
+        }
+
+        .comment-form,
+        .comment {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 0;
+        }
+
+        .comment-form .comment-avatar,
+        .comment .comment-avatar {
+            border: 2px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+            height: 80px;
+            left: 0;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            width: 80px;
+        }
+        .comment-form .comment-avatar img,
+        .comment .comment-avatar img {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+
+        .comment .comment-box {
+            background-color: #fcfcfc;
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .15);
+            margin-left: 100px;
+            min-height: 60px;
+            position: relative;
+            padding: 15px;
+        }
+
+        .comment .comment-box:before,
+        .comment .comment-box:after {
+            border-width: 10px 10px 10px 0;
+            border-style: solid;
+            border-color: transparent #FCFCFC;
+            content: "";
+            left: -10px;
+            position: absolute;
+            top: 20px;
+        }
+
+        .comment .comment-box:before {
+            border-color: transparent rgba(0, 0, 0, .05);
+            top: 22px;
+        }
+
+        .comment .comment-text {
+            color: #555f77;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .comment .comment-footer {
+            color: #acb4c2;
+            font-size: 13px;
+        }
+
+        .comment .comment-footer:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .comment .comment-footer a {
+            color: #acb4c2;
+            text-decoration: none;
+            -webkit-transition: 350ms color;
+            -moz-transition: 350ms color;
+            -ms-transition: 350ms color;
+            -o-transition: 350ms color;
+            transition: 350ms color;
+        }
+
+        .comment .comment-footer a:hover {
+            color: #555f77;
+            text-decoration: underline;
+        }
+        .comment .comment-info {
+            float: left;
+            width: 100%;
+        }
+        .comment .comment-date:before {
+            content: "|";
+            margin: 0 10px;
+        }
+    </style>
+}
+
+<div class="block-header">
+    <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth primary-theme"><i class="fa fa-arrow-left"></i></a>Submit Task</h2>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Home/Index" class="primary-theme"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="/" class="primary-theme">Groups</a></li>
+                <li class="breadcrumb-item"><a href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "group", action = "Show", groupid = Model.StepRun.ProcessRun.Process.IdGroup })" class="primary-theme">@Model.StepRun.ProcessRun.Process.Group.Name</a></li>
+                <li class="breadcrumb-item"><a href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detail", processid = Model.StepRun.ProcessRun.IdProcess })" class="primary-theme">@Model.StepRun.ProcessRun.Name</a></li>
+                <li class="breadcrumb-item"><a href="" class="primary-theme">@Model.StepRun.Name</a></li>
+                <li class="breadcrumb-item"><a href="" class="primary-theme"> @Model.Name</a></li>
+            </ul>
+        </div>
+        @*<div class="col-lg-6 col-md-4 col-sm-12 text-right">
+            <div class="bh_chart hidden-xs">
+                <div class="float-left m-r-15">
+                    <small>Visitors</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-user"></i> 1,784</h6>
+                </div>
+                <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Visits</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-globe"></i> 325</h6>
+                </div>
+                <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
+            </div>
+            <div class="bh_chart hidden-sm">
+                <div class="float-left m-r-15">
+                    <small>Chats</small>
+                    <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> 13</h6>
+                </div>
+                <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
+            </div>
+        </div>*@
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+            <div class="body" id="show-task">
+                <div class="row clearfix disable-all">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label for="task-name" class="required">Task Name</label>
+                            <input type="text" class="form-control" id="task-name" name="@Html.NameFor(m => m.Name)" value="@Model.Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="task-role">Select Role</label>
+                        <select id="task-role" class="form-control show-tick ms select2">
+                            @if (Model.IdRole == null)
+                            {
+                                <option></option>
+                            }
+                            else
+                            {
+                                <option>@Model.Role.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="task-description">Description</label>
+                            <textarea class="form-control" rows="5" placeholder="Write something about your task (optional)" id="task-description" name="@Html.NameFor(m => m.Description)">@Model.Description</textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        @Html.Partial("~/Views/Shared/Common/_File.cshtml", new ViewDataDictionary { { "filess", files }, { "isRun", true } })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (idUser.ToString() == role.IdUser || isManager == true)
+{
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="body" id="show-taskrun">
+                    <div class="row clearfix">
+                        <div class="col-sm-12 setDataWrap">
+                            <form class="render-wrap form-validation @if (Model.Status1.Name != "Open" && (idUser.ToString() != role.IdUser || isManager != true)) { WriteLiteral("disable-all"); }" id="render-wrap" novalidate></form>
+                        </div>
+                        @if (Model.Status1.Name == "Finish" || Model.Status1.Name == "Done")
+                        {
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label for="">Done By</label>
+                                    <input type="text" class="form-control" id="task-name" name="" value="@Model.AspNetUser1.UserName" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="">Date</label>
+                                <input type="text" class="form-control" id="task-name" name="" value="@Model.Done_At" disabled>
+                            </div>
+                        }
+                        @if (Model.Status1.Name == "Finish")
+                        {
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label for="">Approve By</label>
+                                    <input type="text" class="form-control" id="task-name" name="" value="@Model.AspNetUser.UserName" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="">Date</label>
+                                <input type="text" class="form-control" id="task-name" name="" value="@Model.Approve_At" disabled>
+                            </div>
+                        }
+                        <div class="col-sm-12" id="button-action">
+                            @if (Model.StepRun.Status1.Name == "Running")
+                            {
+                                if (Model.Status1.Name == "Open")
+                                {
+                                    <button id="btn-savetask" class="btn btn-primary-theme waves-effect" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving..."><i class="fa fa-save"></i> Save</button>
+                                    <button id="btn-donetask" class="btn btn-primary-theme waves-effect" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Submiting..."><i class="fa fa-check"></i> Submit</button>
+                                }
+                                if (Model.Status1.Name == "Done")
+                                {
+                                    if (isManager)
+                                    {
+                                        <button id="btn-opentask" value="@Model.Id" class="btn btn-primary-theme waves-effect" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Opening...">Open</button>
+                                        <button id="btn-finishtask" value="@Model.Id" class="btn btn-primary-theme waves-effect" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Finishing...">Finish </button>
+                                    }
+                                    <a href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detail", processid = Model.StepRun.ProcessRun.IdProcess })" class="btn btn-success">Back</a>
+
+                                }
+                                if (Model.Status1.Name == "Finish")
+                                {
+                                    if (isManager)
+                                    {
+                                        <button id="btn-opentask" value="@Model.Id" class="btn btn-primary-theme waves-effect" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Opening...">Open</button>
+                                    }
+                                    <a href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "processrun", action = "detail", processid = Model.StepRun.ProcessRun.IdProcess })" class="btn btn-success">Back</a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Comments</h2>
+                </div>
+                <div class="body">
+                    <!-- Comment -->
+                    <div class="task-comment">
+                        <div class="comment-form">
+                            <div class="comment-avatar">
+                                <img src="http://lorempixel.com/200/200/people">
+                            </div>
+                            <div class="form">
+                                <div class="form-row">
+                                    <textarea class="input" placeholder="Add comment..." id="comment-content"></textarea>
+                                </div>
+                                <div class="form-row clearfix">
+                                    <button class="btn btn-primary-theme waves-effect" id="btn-comment-add" style="display:block; margin-left:auto" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Commenting...">Comment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Comment -->
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section CustomScripts{
+    <script src="~/Content/vendor/dropify/js/dropify.min.js"></script>
+    <script src="~/Content/vendor/FormBuilder/form-render.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+
+        $(function () {
+            //get comments
+            var t = {
+                id:@Model.Id,
+                direction: "@Direction.TaskRun"
+            };
+            getComments(t);
+            var taskform = `@Html.Raw(Model.ValueFormJson.Replace("\r\n",""))`;
+            taskform = JSON.parse(taskform.replace(/maxlength/gi, "maxtextlength"));
+            var optionRender = {
+                uploadFile: function (fieldData) {
+                    var attr = [];
+                    if (fieldData.required) {
+                        attr.push("required");
+                    }
+                    attr.push(`maxsize= ${fieldData.maxfilesize}${fieldData.unit}`);
+                    var haveFile = Boolean(fieldData.filename) && Boolean(fieldData.path);
+                    if (haveFile) {
+                        attr.push(`data-default-file=/${fieldData.path}/${fieldData.filename}`);
+                    }
+                    return {
+                        field: `<input type="file" id="${fieldData.name}" ${attr.join(" ")}>`,
+                        onRender: function () {
+                            var inputfile = $(`#${fieldData.name}`);
+                            var dropify = inputfile.dropify({
+                                messages: {
+                                    'default': 'Drag and drop a file here or click',
+                                    'replace': 'Drag and drop or click to replace',
+                                    'remove': 'Remove',
+                                    'error': 'Ooops, something wrong happended.'
+                                },
+                                error: {
+                                    'fileSize': 'The file size is too big ({{ value }} max).',
+                                    'minWidth': 'The image width is too small ({{ value }}}px min).',
+                                    'maxWidth': 'The image width is too big ({{ value }}}px max).',
+                                    'minHeight': 'The image height is too small ({{ value }}}px min).',
+                                    'maxHeight': 'The image height is too big ({{ value }}px max).',
+                                    'imageFormat': 'The image format is not allowed ({{ value }} only).'
+                                }
+                            });
+                            dropify.on('dropify.beforeClear', function (event, element) {
+                                return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+                            });
+                            dropify.on('dropify.afterClear', function (event, element) {
+                                var element = $(this);
+                                element.removeAttr("data-default-file");
+                                element.parents(".dropify-wrapper").find(".dropify-download").remove();
+                                form.validate(element);
+                            });
+                            inputfile.on('change', function () {
+                                var element = $(this);
+                                element.removeAttr("data-default-file");
+                                element.parents(".dropify-wrapper").find(".dropify-download").remove();
+                                form.validate(element);
+                            });
+                            if (haveFile) {
+                                var downloadAction = window.location.origin + "/file/download";
+                                $(`<a href="${downloadAction}/${fieldData.download}" class="dropify-download">Download</a>`).insertAfter(inputfile);
+                            }
+                        }
+                    };
+                }
+            }
+            if (taskform != null) {
+                var render = $("#render-wrap").formRender({ templates: optionRender, formData: taskform });
+            }
+            //disable all field
+            disabledAllField();
+             @{ var readOnly = Model.Status1.Name != "Open" && (idUser.ToString() != role.IdUser || isManager != true) ? 1 : 0; }
+            var readOnly = @readOnly;
+            if (readOnly) {
+               $(".dropify-clear").remove();
+               $(".dropify-download").css("right", "25px");
+                setTimeout(function () {
+                    if (typeof tinyMCE != 'undefined') {
+                       tinyMCE.activeEditor.setMode('readonly');
+                    }
+               }, 500);
+            }
+            var form = $(".form-validation").formValidation();
+            $('#btn-savetask').on('click', function () {
+                var $this = $(this);
+                let formrender = $("#render-wrap").formRender("userData");
+                let info = [];
+                let data = new FormData()
+                formrender.forEach(function (input) {
+
+                    if (input["type"] == "textarea") {
+                        if (input["subtype"] == "tinymce") {
+                            input["userData"] = input["userData"].map(x => x.replace("\r\n", ""));
+                        } else {
+                            input["userData"] = input["userData"].map(x => x.replace("\r\n", "\\n"));
+
+                        }
+                    }
+                    if (input["type"] == "uploadFile") {
+                        input["userData"] = "";
+                        var fileElement = $(`#${input["name"]}`);
+                        var fileData = fileElement[0].files[0];
+                        var emptyFile = fileElement[0].files.length == 0 ? true : false
+                        if (!fileElement[0].hasAttribute("data-default-file")) {
+                            input["userData"] = emptyFile ? "" : fileData.name;
+                        }
+
+                        var file = {
+                            id: input["name"],
+                            isEmpty: emptyFile,
+                            isEdit: fileElement[0].hasAttribute("data-default-file") ? true : false,
+                        };
+                        info.push(file);
+                        data.append(`${input["name"]}`, emptyFile ? null : fileData);
+                    }
+                });
+
+                //save
+                toggleLoading($this);
+                data.append("idtaskrun", @Model.Id);
+                data.append("formrender", JSON.stringify(formrender));
+                data.append("info", JSON.stringify(info));
+                setTimeout(function () {
+                    saveTaskForm($this, data);
+                }, 1000);
+            });
+            $('#btn-donetask').on('click', function () {
+                var $this = $(this);
+                let formrender = $("#render-wrap").formRender("userData");
+                let isFormHaveError = form.validates();
+                let info = [];
+                let data = new FormData();
+                formrender.forEach(function (input) {
+
+                    if (input["type"] == "textarea") {
+                        let textarea = $(`#${input["name"]}`);
+                        if (input["subtype"] == "tinymce") {
+                            input["userData"] = input["userData"].map(x => x.replace("\r\n", ""));
+                            isFormHaveError = form.validate(textarea) ? true : isFormHaveError;
+                        } else {
+                            input["userData"] = input["userData"].map(x => x.replace("\r\n", "\\n"));
+                        }
+                    }
+                    if (input["type"] == "uploadFile") {
+                        input["userData"] = "";
+                        var fileElement = $(`#${input["name"]}`);
+                        var fileData = fileElement[0].files[0];
+                        var emptyFile = fileElement[0].files.length == 0 ? true : false
+                        if (!fileElement[0].hasAttribute("data-default-file")) {
+                            input["userData"] = emptyFile ? "" : fileData.name;
+                        }
+
+                        var file = {
+                            id: input["name"],
+                            isEmpty: emptyFile,
+                            isEdit: fileElement[0].hasAttribute("data-default-file") ? true : false,
+                        };
+                        info.push(file);
+                        data.append(`${ input["name"] }`, emptyFile ? null : fileData);
+                    }
+                });
+
+                if (isFormHaveError) {
+                    showToastr("error", "Error!!");
+                } else {
+                    setConfirm(`Are you sure you want to submit this task?`, `<textarea class="form-control" id="comment-action-content" placeholder="Your comment (optional)" rows="6"></textarea>`, function () {
+                        toggleLoading($this);
+                        var content = this.$content.find("#comment-action-content").val().trim();
+                        data.append("comment", content);
+                        data.append("idtaskrun", @Model.Id);
+                        data.append("formrender", JSON.stringify(formrender));
+                        data.append("info", JSON.stringify(info));
+                        setTimeout(function () {
+                            submitTaskForm($this,data);
+                        }, 1000);
+                    });
+                }
+            });
+            $('#btn-finishtask').on('click', function () {
+                var $this = $(this);
+                let data = {
+                    idtask: @Model.Id
+                };
+                setConfirm(`Are you sure you want to finish this task?`, `<textarea class="form-control" id="comment-action-content" placeholder="Your comment (optional)" rows="6"></textarea>`, function () {
+                    toggleLoading($this);
+                    var content = this.$content.find("#comment-action-content").val().trim();
+                    let data = {
+                            idtask: @Model.Id,
+                            comment: content
+                        };
+                    setTimeout(function () {
+                        submitfinishtask(data);
+                        toggleLoading($this);
+                    }, 1000);
+                });
+            })
+            $('#btn-opentask').on('click', function () {
+                var $this = $(this);
+                setConfirm(`Are you sure you want to open this task?`, `<textarea class="form-control" id="comment-action-content" placeholder="Your comment (optional)" rows="6"></textarea>`, function () {
+                    toggleLoading($this);
+                    var content = this.$content.find("#comment-action-content").val().trim();
+                    let data = {
+                        idtask: @Model.Id,
+                        comment: content
+                    };
+                    setTimeout(function () {
+                        submitopentask(data);
+                        toggleLoading($this);
+                    }, 1000);
+                });
+            });
+            $("#btn-comment-add").on("click", function () {
+                var content = $("#comment-content").val();
+                var $this = $(this);
+                if (content.trim() != "") {
+                    toggleLoading($this);
+                    setTimeout(() => {
+                        var data = {
+                            content: content.trim(),
+                            id: @Model.Id,
+                            direction: "@Direction.TaskRun"
+                        };
+                        addComment(data);
+                        toggleLoading($this);
+                    },1000)
+                }
+            });
+        });
+
+        function saveTaskForm(element, data) {
+                $.ajax({
+                    url: "@Url.Action("savetaskform", "processrun", new { area = "api"})",
+                    type: "POST",
+                    data: data,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        if (response.status == 200) {
+                            showToastr("success", response.message, "toast-bottom-left");
+                        } else {
+                             showToastr("error", "Error!!", "toast-bottom-left");
+                             console.error(response)
+                        }
+                        toggleLoading(element);
+                    }
+                });
+        }
+
+        function submitTaskForm(element, data) {
+                $.ajax({
+                    url: "@Url.Action("donetaskform", "processrun", new { area = "api"})",
+                    type: "POST",
+                    data: data,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        if (response.status == 200) {
+                            window.location.reload();
+                        } else {
+                            showToastr("error", "Error!!", "toast-bottom-left");
+                            console.error(response)
+                        }
+                        toggleLoading(element);
+                    }
+                });
+        }
+        function submitfinishtask(data) {
+            $.ajax({
+                url: "@Url.Action("submitfinishtask", "processrun",new { area = "api"})",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        //showToastr("error", "Error!!", "toast-bottom-left")
+                        window.location.reload();
+                        console.error(response)
+                    }
+                }
+            });
+        }
+
+        function submitopentask(data) {
+            $.ajax({
+                url: "@Url.Action("submitopentask", "processrun",new { area = "api"})",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        //showToastr("error", "Error!!", "toast-bottom-left")
+                        window.location.reload();
+                        console.error(response)
+                    }
+                }
+            });
+        }
+        function addComment(data) {
+            $.ajax({
+                url: "@Url.Action("addcomment", "processrun",new { area = "api"})",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        var t = {
+                            id:@Model.Id,
+                            direction: "@Direction.TaskRun"
+                        };
+                        $("#comment-content").val("");
+                        getComments(t);
+                    }
+                }
+            });
+        }
+        function getComments(data) {
+            $.ajax({
+                url: "@Url.Action("getcomments", "processrun",new { area = "api"})",
+                type: "GET",
+                data: data,
+                dataType: "html",
+                success: function (response) {
+                    console.log(response);
+                    $(".comments").hide("slow", function () {
+                        $(this).remove();
+                    });
+                    $(".task-comment").append(response);
+                }
+            });
+        }
+    </script>
+
+}
+

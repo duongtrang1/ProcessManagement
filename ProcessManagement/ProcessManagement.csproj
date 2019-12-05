@@ -39,7 +39,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\asus\AppData\Local\Temp\vs2D6.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Admin\AppData\Local\Temp\vsA295.tmp\Debug\</IntermediateOutputPath>
     <LangVersion>7.2</LangVersion>
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
@@ -64,7 +64,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\asus\AppData\Local\Temp\vs2D6.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Admin\AppData\Local\Temp\vsA295.tmp\Release\</IntermediateOutputPath>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -4755,6 +4755,7 @@
     <Content Include="Content\vendor\dropify\css\dropify.min.css" />
     <Content Include="Content\vendor\dropify\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\vendor\dropify\js\dropify.min.js" />
+    <Content Include="Content\vendor\dropify\js\getcomment.js" />
     <Content Include="Content\vendor\dropzone\dist\basic.css" />
     <Content Include="Content\vendor\dropzone\dist\dropzone-amd-module.js" />
     <Content Include="Content\vendor\dropzone\dist\dropzone.css" />

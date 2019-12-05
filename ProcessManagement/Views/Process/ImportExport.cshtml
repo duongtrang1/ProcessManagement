@@ -175,7 +175,7 @@
             if (item.loading) return item.text;
             return `<img class="mr-3 process-avatar img-responsive" src="${item.avatar}" alt="${item.text}" /> ${item.text}`;
         }
-        function importProcess(element, data) {
+           function importProcess(element, data) {
             $.ajax({
                 url: "@Url.Action("import", "process", new { area = "api" })",
                 type: "POST",
@@ -192,11 +192,17 @@
                 success: function (response) {
                     console.log(response);
                     if (response.status == 200) {
-
+                        showToastr("success", response.message, "toast-bottom-left");
+                        console.error(response);
                     } else {
-                        showToastr("error", response.message, "toast-bottom-left")
+                        showToastr("success", response.message, "toast-bottom-left")
                         console.error(response)
+                        $.alert({
+                            title: "Tip",
+                            content: `Sucsessfully.`
+                        });
                     }
+                    
                 }
             });
         }

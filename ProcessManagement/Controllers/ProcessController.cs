@@ -414,8 +414,21 @@ namespace ProcessManagement.Controllers
             bool isExist = roleService.isNameExist(role, process.Id);
             if (isExist)
             {
-                SetFlash(FlashType.error, "This name is exist in process");
-                return RedirectToRoute("GroupControlLocalizedDefault", new { controller = "process", action = "editrole", groupslug = process.Group.groupSlug, groupid = process.Group.Id, processid = process.Id });
+                SetFlash(FlashType.error, "Edit role fail");
+                return RedirectToRoute("GroupControlLocalizedDefault", new { controller = "process", action = "showstep", groupslug = group.groupSlug, groupid = group.Id, processid = process.Id });
+            }
+            //if (role.Name != "Role")
+            //{
+            //    roleService.editRole(role);
+            //    SetFlash(FlashType.success, "EditedRole Successfully");
+            //    return RedirectToRoute("GroupControlLocalizedDefault", new { controller = "process", action = "showstep", groupslug = group.groupSlug, groupid = group.Id, processid = process.Id });
+
+            //}
+            if (role.Name == "Role")
+            {
+                SetFlash(FlashType.error, "Edit role fail");
+                //return RedirectToRoute("GroupControlLocalizedDefault", new { controller = "process", action = "showstep", groupslug = group.groupSlug, groupid = group.Id, processid = process.Id });
+                return View("showstep");
             }
 
             roleService.editRole(role);

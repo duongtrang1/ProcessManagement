@@ -39,7 +39,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\Admin\AppData\Local\Temp\vsA295.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\TUANNG~1\AppData\Local\Temp\vs6AF4.tmp\Debug\</IntermediateOutputPath>
     <LangVersion>7.2</LangVersion>
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
@@ -64,7 +64,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\Admin\AppData\Local\Temp\vsA295.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\TUANNG~1\AppData\Local\Temp\vs6AF4.tmp\Release\</IntermediateOutputPath>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>

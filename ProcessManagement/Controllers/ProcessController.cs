@@ -668,6 +668,8 @@ namespace ProcessManagement.Controllers
         [GroupAuthorize]
         public ActionResult AddTask(int stepid)
         {
+
+
             string idUser = User.Identity.GetUserId();
             Step step = stepService.findStep(stepid);
             if (step == null) return HttpNotFound();
@@ -798,6 +800,12 @@ namespace ProcessManagement.Controllers
             ViewData["processes"] = pr;
             ViewData["group"] = gr;
             return View(gr);
+        }
+
+        public ActionResult Date()
+
+        {
+            return View();
         }
     }
 }

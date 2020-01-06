@@ -86,7 +86,7 @@
                 <div class="tab-content">
                     <!-- TODO: Không biết để nút remove với nút tranfer owner ở đâu -->
                     <div class="tab-pane animated fadeIn show active clearfix" id="overview-tab">
-                        <button id="btn-group-delete" style="float:right; margin-left: 5px" data-id="@Model.Id" data-name="@Model.Name" class="btn btn-sm btn-danger waves-effect"><i class="icon-trash"> Delete Group</i></button>
+                        <button id="btn-group-delete" style="float:right; margin-left: 5px" data-id="@Model.Id" data-name="@Model.Name" class="btn btn-sm btn-danger waves-effect"><i class="icon-trash"> Delete Workspace</i></button>
                         <a class="btn-circle btn-primary-theme btn-switch-tab" style="float:right" href="#setting-tab"><i class="icon-settings"></i> Settings</a>
                         <h5>@Model.Name</h5>
                         <p>@Model.Description</p>
@@ -99,7 +99,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="required" for="group-name">Group Name</label>
+                                    <label class="required" for="group-name">Workspace Name</label>
                                     <input type="text" class="form-control" id="group-name" placeholder="Group Name" name="@Html.NameFor(m => m.Name)">
                                 </div>
                             </div>
@@ -162,7 +162,7 @@
     <div class="col-lg-4 col-md-12">
         <div class="card" style="height: 100%">
             <div class="header">
-                <h2>Processes in group</h2>
+                <h2>Processes in Workspace</h2>
                 <ul class="header-dropdown">
                     <li><a class="tab_btn" href="@Url.RouteUrl("GroupControlLocalizedDefault", new { controller = "process", action = "newprocess", groupslug = Model.groupSlug, groupid = Model.Id })" data-toggle="tooltip" data-placement="top" title="Create New Process"><i class="fa fa-plus" aria-hidden="true"></i></a></li>
                     <li><a class="tab_btn" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Previous"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>

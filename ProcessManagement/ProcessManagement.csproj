@@ -4011,7 +4011,6 @@
     <Content Include="Content\vendor\DateJS\build\date-fr-BE.js" />
     <Content Include="Content\vendor\DateJS\build\date-fr-CA.js" />
     <Content Include="Content\vendor\DateJS\build\date-fr-CH.js" />
-    <Content Include="Content\vendor\DateJS\build\date-fr-FR.js" />
     <Content Include="Content\vendor\DateJS\build\date-fr-LU.js" />
     <Content Include="Content\vendor\DateJS\build\date-fr-MC.js" />
     <Content Include="Content\vendor\DateJS\build\date-gl-ES.js" />
@@ -4325,7 +4324,6 @@
     <Content Include="Content\vendor\DateJS\build\production\date-fr-BE.min.js" />
     <Content Include="Content\vendor\DateJS\build\production\date-fr-CA.min.js" />
     <Content Include="Content\vendor\DateJS\build\production\date-fr-CH.min.js" />
-    <Content Include="Content\vendor\DateJS\build\production\date-fr-FR.min.js" />
     <Content Include="Content\vendor\DateJS\build\production\date-fr-LU.min.js" />
     <Content Include="Content\vendor\DateJS\build\production\date-fr-MC.min.js" />
     <Content Include="Content\vendor\DateJS\build\production\date-gl-ES.min.js" />

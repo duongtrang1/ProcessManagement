@@ -1,7 +1,7 @@
 ﻿@{
     var grouplist = ViewData["ListGroup"] as List<ProcessManagement.Models.Group>;
 }
-<div class="clearfix"><a href="@Url.RouteUrl("GroupLocalizedDefault",new { action = "NewGroup" })" class="btn btn-success pull-right">Create Group</a></div>
+<div class="clearfix"><a href="@Url.RouteUrl("GroupLocalizedDefault",new { action = "NewGroup" })" class="btn btn-success pull-right">Create Workspace</a></div>
 <div class="group-list row display-flex">
     @foreach (var group in grouplist)
     {

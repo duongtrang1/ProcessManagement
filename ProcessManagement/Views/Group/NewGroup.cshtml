@@ -17,7 +17,7 @@
             </a>
             <ul class="breadcrumb">
                 <li><a href="@Url.RouteUrl("GroupLocalizedDefault", new { controller = "group", action = "index"})"><i class="icon-home"></i></a></li>
-                <li><a href="javascript:void(0);"><i class="fa fa-plus"></i> New Group</a></li>
+                <li><a href="javascript:void(0);"><i class="fa fa-plus"></i> New Workspace</a></li>
             </ul>
         </div>
         @*<div class="col-lg-6 col-md-4 col-sm-12 text-right">
@@ -53,7 +53,7 @@
                     <div class="row clearfix form-validation">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="group-name" class="required">Group Name</label>
+                                <label for="group-name" class="required">Workspace Name</label>
                                 <input type="text" id="group-name" class="form-control" name="@Html.NameFor(m => m.Name)" required>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <label for="group-description">Group Description</label>
+                            <label for="group-description">Workspace Description</label>
                             <div class="form-group">
                                 <textarea class="form-control" id="group-description" rows="8" placeholder="Write something about your group (optional)" name="@Html.NameFor(m => m.Description)"></textarea>
                             </div>
